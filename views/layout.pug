@@ -1,7 +1,26 @@
 doctype html
-html
+html(lang='en')
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, inital-scale=1.0')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    .ui.grid
+      .four.wide.column
+        block sidebar
+          .ui.vertical.menu
+            a.active.teal.item Categories
+              .ui.teal.left.pointing.label 4
+            a.item Brands
+              .ui.label 8
+            a.item Items
+              .ui.label 25
+            .item
+              .ui.transparent.icon.input
+                input(type='text' placeholder='Search Item...')
+                i.search.icon
+      .twelve.wide.column        
     block content

@@ -2,7 +2,8 @@ var Item = require('../models/item');
 
 // items list
 exports.item_list = function(req, res, next){
-    res.send('ITEM LIST');
+    res.render('../views/items/show', {title: 'ITEMSSSz'});
+    // res.send('ITEM LIST');
 };
 
 // one item
