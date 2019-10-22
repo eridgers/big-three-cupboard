@@ -7,20 +7,22 @@ var item_controller = require('../controllers/itemController');
 
 
 // list
-router.get('/items', item_controller.item_list);
+router.get('/', item_controller.item_list);
 
 // detail (SHOW)
-router.get('/items/:id', item_controller.item_detail);
+router.get('/:id', item_controller.item_detail);
 
 // new
-router.get('/items/new', item_controller.item_new);
+router.get('/new', item_controller.item_new);
 // create
-router.post('/items', item_controller.item_create);
+router.post('/', item_controller.item_create);
 
 // edit
-router.get('/items/:id/edit', item_controller.item_edit);
+router.get('/:id/edit', item_controller.item_edit);
 // update
-router.put('/items/:id', item_controller.item_update);
+router.put('/:id', item_controller.item_update);
 
 // delete
-router.delete('/items/:id', item_controller.item_delete);
+router.delete('/:id', item_controller.item_delete);
+
+module.exports = router;
