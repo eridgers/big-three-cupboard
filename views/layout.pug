@@ -9,18 +9,20 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .ui.grid
-      .four.wide.column
+      .one.wide.column
         block sidebar
-          .ui.vertical.menu
-            a.active.teal.item Categories
-              .ui.teal.left.pointing.label 4
-            a.item Brands
-              .ui.label 8
-            a.item Items
-              .ui.label 25
-            .item
-              .ui.transparent.icon.input
-                input(type='text' placeholder='Search Item...')
-                i.search.icon
-      .twelve.wide.column        
+          div.ui.left.vertical.inverted.sidebar.labeled.visible.icon.menu
+            a.item
+              i.tags.icon
+              | Categories
+            a.item
+              i.archive.icon
+              | Brands
+            a.item
+              i.box.icon
+              | Items
+            a.item
+              i.clipboard.icon
+              | Gear Lists
+      .fifteen.wide.column
     block content
