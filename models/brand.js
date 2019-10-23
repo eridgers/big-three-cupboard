@@ -6,7 +6,7 @@ brandSchema = mongoose.Schema({
 
 // virtual
 brandSchema.virtual('url').get(function(){
-    return '/brand/' + this.id;
+    return '/brands/' + this.id;
 })
 
 brandSchema.virtual('averagePrice').get(function(){
@@ -14,4 +14,4 @@ brandSchema.virtual('averagePrice').get(function(){
     return 5;
 })
 
-module.exports = mongoose.model('brand', brandSchema);
+module.exports = mongoose.model('Brand', brandSchema);

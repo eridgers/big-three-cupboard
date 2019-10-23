@@ -8,6 +8,6 @@ var categorySchema = new mongoose.Schema(
 )
 
 // virtual url
-categorySchema.virtual('url').get(function() {return '/category/' + this.id;})
+categorySchema.virtual('url').get(function() {return '/categories/' + this.id;})
 
 module.exports = mongoose.model('category', categorySchema);

@@ -12,7 +12,7 @@ itemSchema = new mongoose.Schema({
 
 // virtual
 itemSchema.virtual('url').get(function(){
-    return '/item/' + this.id;
+    return '/items/' + this.id;
 })
 
 itemSchema.virtual('costByGram').get(function(){
