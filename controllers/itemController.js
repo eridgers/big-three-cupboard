@@ -2,13 +2,26 @@ var Item = require('../models/item');
 
 // items list
 exports.item_list = function(req, res, next){
-    res.render('../views/items/show', {title: 'ITEMSSSz'});
-    // res.send('ITEM LIST');
+    Item.find({}).populate('brand').exec(function(err, items){
+        if(err) {return next(err);}
+        if(items==null){
+            res.send('NO ITEMS');
+        }
+        res.render('../views/items/index', {title: 'Complete Item Closet!', items: items});
+    })
 };
 
 // one item
 exports.item_detail = function(req, res, next){
-    res.send('ITEM DETAIL');
+    Item.findById(req.params.id).exec(function(err, item){
+        if(err) {return next(err);}
+        if(item==null){
+            var err = new Error('Item not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('../views/items/show', {title: 'Details for Item:', item: item});
+    })
 };
 
 // create GET
