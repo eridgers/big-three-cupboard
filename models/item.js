@@ -7,7 +7,8 @@ itemSchema = new mongoose.Schema({
     cost: {type: Number, required: true},
     quantity: {type: Number, required: true, max: 10},
     description: {type: String, required: true},
-    category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}
+    category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
+    image: {type: String, required: true}
 });
 
 // virtual
@@ -20,4 +21,4 @@ itemSchema.virtual('costByGram').get(function(){
     return this.weight / this.cost;
 })
 
-module.exports = mongoose.model('item', itemSchema);
+module.exports = mongoose.model('Item', itemSchema);

@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
 brandSchema = mongoose.Schema({
-    name: {type: String, required: true}
+    name: {type: String, required: true},
+    description: {type: String, required: true},
+    logo: {type: String, required: true}
 })
 
 // virtual
