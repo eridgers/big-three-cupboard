@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block content
+  h1 #{title}
+
+  .ui.divided.relaxed.items
+    each item in items
+      .item
+        .ui.small.image
+          img(src=item.image, alt="#{item.name}")
+        .middle.aligned.content
+          .header #{item.name}
+          .meta
+            span.price $#{item.cost} |
+            span.weight #{item.weight} grams
+          .description #{item.description}
+          .extra
+            a.ui.right.floated.primary.button(href=item.url) View Details
+              i.right.chevron.icon
+            a.ui.right.floated.button.inverted.secondary(href=item.brand.url) See more from #{item.brand.name}
+            .ui.label Lightweight!

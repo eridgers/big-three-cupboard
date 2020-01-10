@@ -1,0 +1,19 @@
+extends ../layout.pug
+
+block content
+  h1 #{title}
+  
+  .ui.two.cards.centered.stackable
+    each category in categories
+      .ui.card
+        .ui.image.medium.centered
+          img(src=category.image, alt="#{category.name}")
+
+        .content
+          .header #{category.name}
+          .meta
+          .description #{category.description}
+        .extra.content
+          .ui.labeled.button
+            a.ui.basic.blue.button(href=category.url) All #{category.name}
+            .ui.basic.left.pointing.blue.label TODO category count
