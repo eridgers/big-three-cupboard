@@ -3,20 +3,22 @@ extends ../layout.pug
 block content
   h1 #{title}
   
-  .ui.link.cards.centered.stackable
+  .ui.divided.relaxed.items
     each item in items
-      .card
-        .image
-          img(src="https://images.unsplash.com/photo-1555580399-49e780f216b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=667&q=80", alt="#{item.name}")
-        .content
-          .header #{item.name}
+      .item
+        .ui.small.image
+          img(src=item.image, alt="#{item.name}")
+        .middle.aligned.content
+          .header #{item.name} 
+          .header.right.floated
+            .ui.mini.image
+              img(src=item.brand.logo, alt="#{item.brand.name}")
           .meta
-            span #{item.brand.name}
-            a.right.floated(href=item.url) View Item
+            span.price $#{item.cost} |
+            span.weight #{item.weight} grams
           .description #{item.description}
-        .extra.content
-          span.right.floated #{item.weight} grams
-          span $#{item.cost}
-    //- each item in items
-    //-   li #{item.name}
-    //- quick info modal?
+          .extra
+            a.ui.right.floated.primary.button(href=item.url) View Details
+              i.right.chevron.icon
+            a.ui.label(href=item.brand.url) #{item.brand.name}
+            a.ui.label(href=item.category.url) #{item.category.name}

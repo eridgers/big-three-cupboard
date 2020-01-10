@@ -1,12 +1,11 @@
 extends ../layout.pug
 
 block content
-  h1.ui.header #{title}
-  span.ui.center.align.header #{item.name}
+  h1.ui.header #{title} #{item.name}
   
   .ui.card
     .image
-      img(src="https://images.unsplash.com/photo-1555580399-49e780f216b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=667&q=80", alt="#{item.name}")
+      img(src=item.image, alt="#{item.name}")
     .content
       .header #{item.name}
       .meta
@@ -16,4 +15,5 @@ block content
     .extra.content
       span.right.floated #{item.weight} grams
       span $#{item.cost}
+      p ($#{item.costByGram} per gram)
 

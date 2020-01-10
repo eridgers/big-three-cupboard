@@ -17,8 +17,7 @@ itemSchema.virtual('url').get(function(){
 })
 
 itemSchema.virtual('costByGram').get(function(){
-    // refine later
-    return this.weight / this.cost;
+    return Math.round((this.weight / this.cost)*100) / 100;
 })
 
 module.exports = mongoose.model('Item', itemSchema);

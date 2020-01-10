@@ -2,7 +2,7 @@ var Item = require('../models/item');
 
 // items list
 exports.item_list = function(req, res, next){
-    Item.find({}).populate('brand').exec(function(err, items){
+    Item.find({}).populate('brand category', 'name url logo').exec(function(err, items){
         if(err) {return next(err);}
         if(items==null){
             res.send('NO ITEMS');
@@ -20,7 +20,7 @@ exports.item_detail = function(req, res, next){
             err.status = 404;
             return next(err);
         }
-        res.render('../views/items/show', {title: 'Details for Item:', item: item});
+        res.render('../views/items/show', {title: 'Details for ', item: item});
     })
 };
 
