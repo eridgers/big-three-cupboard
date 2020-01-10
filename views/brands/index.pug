@@ -1,0 +1,19 @@
+extends ../layout.pug
+
+block content
+  h1 #{title}
+  
+  .ui.two.cards.centered.stackable
+    each brand in brands
+      .ui.card
+        .ui.image.medium.centered
+          img(src=brand.logo, alt="#{brand.name}")
+
+        .content
+          .header #{brand.name}
+          .meta
+          .description #{brand.description}
+        .extra.content
+          .ui.labeled.button
+            a.ui.basic.blue.button(href=brand.url) All #{brand.name}
+            .ui.basic.left.pointing.blue.label TODO brand count
