@@ -9,20 +9,20 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .ui.grid
-      .one.wide.column
+      .two.wide.column
         block sidebar
           div.ui.left.vertical.inverted.sidebar.labeled.visible.icon.menu
-            a.item
+            a.item(href="/categories")
               i.tags.icon
               | Categories
-            a.item
+            a.item(href="/brands")
               i.archive.icon
               | Brands
-            a.item
+            a.item(href="/items")
               i.box.icon
               | Items
-            a.item
+            a.item(href="/gear_lists")
               i.clipboard.icon
               | Gear Lists
-      .fifteen.wide.column
+      .thirteen.wide.column
     block content
