@@ -8,13 +8,14 @@ var brand_controller = require('../controllers/brandController');
 // get list of brands
 router.get('/', brand_controller.brand_list);
 
-// get brand
-router.get('/:id', brand_controller.brand_detail);
-
 // create GET
 router.get('/new', brand_controller.brand_new);
+
 // create POST
 router.post('/', brand_controller.brand_create);
+
+// get brand
+router.get('/:id', brand_controller.brand_detail);
 
 // update GET (edit)
 router.get('/:id/edit', brand_controller.brand_edit);

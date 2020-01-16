@@ -9,13 +9,14 @@ var item_controller = require('../controllers/itemController');
 // list
 router.get('/', item_controller.item_list);
 
-// detail (SHOW)
-router.get('/:id', item_controller.item_detail);
-
 // new
 router.get('/new', item_controller.item_new);
+
 // create
 router.post('/', item_controller.item_create);
+
+// detail (SHOW)
+router.get('/:id', item_controller.item_detail);
 
 // edit
 router.get('/:id/edit', item_controller.item_edit);

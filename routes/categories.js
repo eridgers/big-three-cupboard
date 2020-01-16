@@ -9,13 +9,14 @@ var category_controller = require('../controllers/categoryController');
 // list
 router.get('/', category_controller.category_list);
 
-// detail
-router.get('/:id', category_controller.category_detail);
-
 // create GET
 router.get('/new', category_controller.category_new);
+
 // create POST
 router.post('/', category_controller.category_create);
+
+// detail
+router.get('/:id', category_controller.category_detail);
 
 // update GET
 router.get('/:id/edit', category_controller.category_edit);
