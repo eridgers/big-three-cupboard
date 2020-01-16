@@ -2,6 +2,7 @@ extends ../layout.pug
 
 block content
   h1 #{title}
+    a.ui.right.floated.button(href="/items/new") Submit new peice of gear
   
   .ui.divided.relaxed.items
     each item in items

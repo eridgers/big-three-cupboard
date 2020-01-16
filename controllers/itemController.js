@@ -1,4 +1,10 @@
 var Item = require('../models/item');
+var Brand = require('../models/brand');
+var Category = require('../models/category');
+var async = require('async');
+
+const { check, validationResult } = require('express-validator');
+const { sanitizeBody } = require('express-validator');
 
 // items list
 exports.item_list = function(req, res, next){
@@ -26,12 +32,79 @@ exports.item_detail = function(req, res, next){
 
 // create GET
 exports.item_new = function(req, res, next){
-    res.send('ITEM CREATE GET');
+    async.parallel({
+        brands: function(callback){
+            Brand.find(callback);
+        },
+        categories: function(callback){
+            Category.find(callback);
+        },
+    }, function(err, results){
+        if(err) {return next(err);}
+        res.render('../views/items/item_form', {title: 'Create Gear', brands: results.brands, categories: results.categories});
+    });
 };
+
 // create POST
-exports.item_create = function(req, res, next){
-    res.send('ITEM CREATE POST');
-};
+// export array rather than single function
+exports.item_create = [
+
+    // Validate fields using express-validator
+    check('name').isAlphanumeric().trim(),
+    check('weight').isInt().trim(),
+    check('cost').isDecimal().trim(),
+    check('description', 'Description must be at least 30 characters.').isAlphanumeric().isLength({min: 30}).trim(),
+    // TODO Image and quantity needs to be dealt with!
+
+    // Santize fields using express-validator
+    sanitizeBody('*').escape(),
+    sanitizeBody('brand.*').escape(),    
+    sanitizeBody('category.*').escape(),    
+    // Now process request
+    (req, res, next) => {
+        // Extract Validation errors from request
+        const errors = validationResult(req);
+        // Create new Item object with trimmed/escaped data
+        var item = new Item(
+            {   name: req.body.name,
+                brand: req.body.brand,
+                category: req.body.category,
+                weight: req.body.weight,
+                cost: req.body.cost,
+                description: req.body.description,
+                //PLACEHOLDER
+                quantity: 1,
+                image: ' '
+            });
+            console.log('item ' + item);
+        // Check for errors, if there are some render form again with data which was input
+        if(!errors.isEmpty()){
+            // get Brands and Categories for the form (as in NEW GET)
+            async.parallel({
+                brands: function(callback){
+                    Brand.find(callback);
+                },
+                categories: function(callback){
+                    Category.find(callback);
+                },
+            }, function(err, results){
+                if(err) {return next(err);}
+                // render the new form
+                res.render('../views/items/item_form', {title: 'Create Gear', brands: results.brands, categories: results.categories, item: item, errors: errors.array()});
+            });
+            return;
+        }
+        // Else data is valid Save Item to DB
+        else{
+            item.save(function(err){
+                if(err) {return next(err);}
+                // success? redirect user to the item they created.
+                res.redirect(item.url);
+            });
+        }
+    }
+
+];
 
 // update GET
 exports.item_edit = function(req, res, next){
