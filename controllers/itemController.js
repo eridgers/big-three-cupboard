@@ -53,7 +53,7 @@ exports.item_create = [
     check('name').isAlphanumeric().trim(),
     check('weight').isInt().trim(),
     check('cost').isDecimal().trim(),
-    check('description', 'Description must be at least 30 characters.').isAlphanumeric().isLength({min: 30}).trim(),
+    check('description').isAlphanumeric().isLength({min: 30}).withMessage('Description must be at least 30 characters.').trim(),
     // TODO Image and quantity needs to be dealt with!
 
     // Santize fields using express-validator
