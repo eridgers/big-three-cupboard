@@ -50,10 +50,10 @@ exports.item_new = function(req, res, next){
 exports.item_create = [
 
     // Validate fields using express-validator
-    check('name').isAlphanumeric().trim(),
-    check('weight').isInt().trim(),
+    check('name').isLength({min: 1}).withMessage('Name must be populated.').matches(/^[a-z0-9 ]+$/i).withMessage('Name should be alphanumeric').trim(),
+    check('weight').isInt().withMessage('Weight must be in whole grams').trim(),
     check('cost').isDecimal().trim(),
-    check('description').isAlphanumeric().isLength({min: 30}).withMessage('Description must be at least 30 characters.').trim(),
+    check('description').matches(/^[a-z0-9 ?]+$/i).isLength({min: 30}).withMessage('Description must be at least 30 characters.').trim(),
     // TODO Image and quantity needs to be dealt with!
 
     // Santize fields using express-validator
@@ -72,11 +72,12 @@ exports.item_create = [
                 weight: req.body.weight,
                 cost: req.body.cost,
                 description: req.body.description,
-                //PLACEHOLDER
+                //PLACEHOLDER quantity and image
                 quantity: 1,
                 image: ' '
             });
             console.log('item ' + item);
+            console.log(errors);
         // Check for errors, if there are some render form again with data which was input
         if(!errors.isEmpty()){
             // get Brands and Categories for the form (as in NEW GET)
