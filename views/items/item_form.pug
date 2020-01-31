@@ -8,7 +8,7 @@ block content
       .six.wide.column
         .field
           label(for="name") Name
-          input#name.form-control(type="text" placeholder="Name of Gear" name="name" required="true" value=(undefined==name ? '' : item.name))
+          input#name.form-control(type="text" placeholder="Name of Gear" name="name" required="true" value=(undefined==item ? '' : item.name))
         .fields
           .field.twelve.wide
             label(for="category") Category
@@ -31,14 +31,14 @@ block content
         .fields
           .field
             label(for="cost") Price:
-            input#price.form-control(type="number" placeholder="price in USD" name="cost" min="0.01" step="0.01" required="true" value=(undefined==item ? '' : item.price))
+            input#cost.form-control(type="number" placeholder="price in USD" name="cost" min="0.01" step="0.01" required="true" value=(undefined==item ? '' : item.cost))
           .field
             label(for="weight") Weight:
             input#weight.form-control(type="number" placeholder="weight in grams" name="weight" min="1" step="1" required="true" value=(undefined==item ? '' : item.weight))
       .ten.wide.column
         .field
           label(for="description") Description:
-          textarea#description.form-control(type="textarea" placeholder="description" name="description" rows="5" required="true" value=(undefined==item ? '' : item.description))
+          textarea#description.form-control(type="textarea" placeholder="description" name="description" rows="5" required="true")=(undefined==item ? '' : item.description)
         button.ui.submit.button.right.floated(type="submit") Create
 
   if errors
