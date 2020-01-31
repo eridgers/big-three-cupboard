@@ -76,8 +76,6 @@ exports.item_create = [
                 quantity: 1,
                 image: ' '
             });
-            console.log('item ' + item);
-            console.log(errors);
         // Check for errors, if there are some render form again with data which was input
         if(!errors.isEmpty()){
             // get Brands and Categories for the form (as in NEW GET)
