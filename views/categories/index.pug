@@ -2,6 +2,7 @@ extends ../layout.pug
 
 block content
   h1 #{title}
+    a.ui.right.floated.button(href="/categories/new") Create New Category
   
   .ui.two.cards.centered.stackable
     each category in categories
