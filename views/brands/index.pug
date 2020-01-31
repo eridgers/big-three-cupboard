@@ -2,6 +2,7 @@ extends ../layout.pug
 
 block content
   h1 #{title}
+    a.ui.button.right.floated(href="/brands/new") Create a New Brand
   
   .ui.two.cards.centered.stackable
     each brand in brands

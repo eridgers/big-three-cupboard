@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block content
+  h1 #{title}
+
+  form.ui.form(action="/brands" method="post")
+    .ui.grid
+      .six.wide.column
+        .field
+          label(for="name") Name
+          input#name.form-control(type="text" placeholder="Name of Brand" name="name" required="true" value=(undefined==brand ? '' : brand.name))
+    .ten.wide.column
+        .field
+          label(for="description") Description:
+          textarea#description.form-control(type="textarea" placeholder="description" name="description" rows="5" required="true")=(undefined==brand ? '' : brand.description)
+        button.ui.submit.button.right.floated(type="submit") Create
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
