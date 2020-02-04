@@ -74,8 +74,25 @@ exports.brand_create = [
     }   
 ];
 
+// delete brand GET
+exports.brand_delete_get= function(req, res, next){
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.params.id).exec(callback)
+        },
+        items: function(callback){
+            Item.findById({'brand': req.params.id}).exec(callback)
+        }, function(err, results){
+            if (err) {return next(err);}
+            if (results.brand == null){
+                res.redirect('../views/brands/index');
+            }
+            res.render('brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
+        });
+};
+
 // delete brand POST
-exports.brand_delete = function(req, res, next){
+exports.brand_delete_post = function(req, res, next){
     async.parallel({
         brand: function(callback){
             Brand.findById(req.body.id).exec(callback)
@@ -84,10 +101,6 @@ exports.brand_delete = function(req, res, next){
             Item.find({'brand': req.body.id}).exec(callback)
         }, function(err, results){
             if(err) {return next(err);}
-            if(results.brand==null){
-                // no such brand exists
-                res.redirect('../views/brands/index');
-            }
             if(results.items.length > 0){
                 res.render('../views/brands/brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
                 return;
