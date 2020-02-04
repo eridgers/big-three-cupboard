@@ -22,7 +22,9 @@ router.get('/:id/edit', brand_controller.brand_edit);
 // update PUT
 router.put('/:id/update', brand_controller.brand_update);
 
-// delete
-router.delete('/:id', brand_controller.brand_delete);
+// delete get
+router.delete('/:id', brand_controller.brand_delete_get);
+// delete post
+router.delete('/:id', brand_controller.brand_delete_post);
 
 module.exports = router;
