@@ -40,6 +40,7 @@ exports.brand_detail = function(req, res, next){
 exports.brand_new = function(req, res, next){
     res.render('../views/brands/brand_form', {title: 'Create Brand'});
 };
+
 // create brand POST
 exports.brand_create = [
     //validate fields using express-validator
@@ -75,7 +76,28 @@ exports.brand_create = [
 
 // delete brand POST
 exports.brand_delete = function(req, res, next){
-    res.send('BRAND DELETE POST');
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.body.id).exec(callback)
+        },
+        items: function(callback){
+            Item.find({'brand': req.body.id}).exec(callback)
+        }, function(err, results){
+            if(err) {return next(err);}
+            if(results.brand==null){
+                // no such brand exists
+                res.redirect('../views/brands/index');
+            }
+            if(results.items.length > 0){
+                res.render('../views/brands/brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
+                return;
+            }else{
+                Brand.findByIdAndRemove(req.body.id, function(err){
+                    if(err) {return next(err);}
+                    res.redirect('../views/brands/index');
+                });
+            }
+        });
 };
 
 // update brand GET (edit)
