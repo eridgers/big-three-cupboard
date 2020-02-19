@@ -1,8 +1,11 @@
 extends ../layout.pug
 
 block content
-  h1 #{title}
-    a.ui.right.floated.button.red(href=category.url+"/delete") Delete Category
+  h1 #{title}?
+  p BELOW ITEMS WILL BE DELETED BY CASCADE
+    form(id="delete-form" action=category.url+"/delete" method="POST")
+      button.ui.button.red(type="submit") YES DELETE THEM ALL
+      a.ui.button.green(href="/categories") Never mind
 
   .ui.divided.relaxed.items
     each item in items
@@ -20,3 +23,5 @@ block content
               i.right.chevron.icon
             a.ui.right.floated.button.inverted.secondary(href=item.brand.url) See more from #{item.brand.name}
             .ui.label Lightweight!
+
+//-   a.ui.button.red(href="/categories/"+category.url+"/delete") YES DELETE THEM ALL

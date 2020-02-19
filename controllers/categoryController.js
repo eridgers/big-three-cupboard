@@ -35,7 +35,7 @@ exports.category_detail = function(req, res, next){
             err.status = 404;
             return next(err);
         }
-        res.render('../views/categories/show', {title: results.category.name, items: results.items});
+        res.render('../views/categories/show', {title: results.category.name, category: results.category, items: results.items});
     });
 };
 
@@ -62,8 +62,6 @@ exports.category_create = [
             //placeholder image
             image: ' '
         })
-        console.log(category);
-        console.log(errors);
         //check for errors, if yes render form again
         if(!errors.isEmpty()){
             res.render('../views/categories/category_form', {title: 'Create Category of Gear', category: category, errors: errors.array()});
@@ -88,38 +86,45 @@ exports.category_update = function(req, res, next){
 
 // delete category GET
 exports.category_delete_get = function(req, res, next){
+    var id = mongoose.Types.ObjectId(req.params.id);
     async.parallel({
         category: function(callback){
-            Category.findById(req.params.id).exec(callback)
+            Category.findById(id).exec(callback)
         },
         items: function(callback){
-            Item.findById({'category': req.params.id}).exec(callback)
-        }, function(err, results){
+            Item.find({'category': id}).exec(callback)
+        },
+    }, function(err, results){
             if (err) {return next(err);}
             if (results.category == null){
-                res.redirect('../views/categories/index');
+                res.redirect('/categories');
             }
-            res.render('category_delete', {title: 'Delete Category', category: results.category, items: results.items});
+            res.render('../views/categories/category_delete', {title: 'Delete Category', category: results.category, items: results.items});
         });
 };
 
 // delete category POST
 exports.category_delete_post = function(req, res, next){
+    var id = mongoose.Types.ObjectId(req.params.id);
     async.parallel({
         category: function(callback){
-            Category.findById(req.body.id).exec(callback)
+            Category.findById(id).exec(callback)
         },
         items: function(callback){
-            Item.find({'category': req.body.id}).exec(callback)
-        }, function(err, results){
+            Item.find({'category': id}).exec(callback)
+        },
+    }, function(err, results){
             if(err) {return next(err);}
-            if(results.items.length > 0){
-                res.render('../views/categories/category_delete', {title: 'Delete Category', category: results.category, items: results.items});
-                return;
-            }else{
-                Category.findByIdAndRemove(req.body.id, function(err){
+            if(results.category == null){
+                res.redirect('/categories');
+            }
+            else{
+                Category.findById(id, function(err, category){
                     if(err) {return next(err);}
-                    res.redirect('../views/categories/index');
+                    else{
+                        category.remove();
+                        res.redirect('/categories');
+                    }
                 });
             }
         });
