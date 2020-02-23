@@ -12,7 +12,7 @@ router.get('/', brand_controller.brand_list);
 router.get('/new', brand_controller.brand_new);
 
 // create POST
-router.post('/', brand_controller.brand_create);
+router.post('/new', brand_controller.brand_create);
 
 // get brand
 router.get('/:id', brand_controller.brand_detail);
@@ -20,9 +20,11 @@ router.get('/:id', brand_controller.brand_detail);
 // update GET (edit)
 router.get('/:id/edit', brand_controller.brand_edit);
 // update PUT
-router.put('/:id/update', brand_controller.brand_update);
+router.post('/:id/edit', brand_controller.brand_update);
 
-// delete
-router.delete('/:id', brand_controller.brand_delete);
+// delete get
+router.get('/:id/delete', brand_controller.brand_delete_get);
+// delete post
+router.post('/:id/delete', brand_controller.brand_delete_post);
 
 module.exports = router;

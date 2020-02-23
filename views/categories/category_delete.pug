@@ -1,13 +1,12 @@
 extends ../layout.pug
 
 block content
-  h1 #{title}
-    .ui.tiny.image.right.floated
-      img(src=brand.logo, alt="#{brand.name}")
-    a.ui.button.right.floated.red(href=brand.url+"/delete") Delete Brand
-    a.ui.button.right.floated.green(href=brand.url+"/edit") Edit Brand
+  h1 #{title}?
+  p BELOW ITEMS WILL BE DELETED BY CASCADE
+    form(id="delete-form" action=category.url+"/delete" method="POST")
+      button.ui.button.red(type="submit") YES DELETE THEM ALL
+      a.ui.button.green(href="/categories") Never mind
 
-  p
   .ui.divided.relaxed.items
     each item in items
       .item
@@ -22,5 +21,5 @@ block content
           .extra
             a.ui.right.floated.primary.button(href=item.url) View Details
               i.right.chevron.icon
-            a.ui.right.floated.button.inverted.secondary(href=item.category.url) View all #{item.category.name}
+            a.ui.right.floated.button.inverted.secondary(href=item.brand.url) See more from #{item.brand.name}
             .ui.label Lightweight!

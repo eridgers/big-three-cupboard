@@ -40,6 +40,7 @@ exports.brand_detail = function(req, res, next){
 exports.brand_new = function(req, res, next){
     res.render('../views/brands/brand_form', {title: 'Create Brand'});
 };
+
 // create brand POST
 exports.brand_create = [
     //validate fields using express-validator
@@ -73,16 +74,83 @@ exports.brand_create = [
     }   
 ];
 
+// delete brand GET
+exports.brand_delete_get = function(req, res, next){
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.params.id).exec(callback)
+        },
+        items: function(callback){
+            Item.find({'brand': req.params.id}).exec(callback)
+        },
+    }, function(err, results){
+            if (err) {return next(err);}
+            if (results.brand == null){
+                res.redirect('/brands');
+            }
+            res.render('../views/brands/brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
+    });
+}
+
 // delete brand POST
-exports.brand_delete = function(req, res, next){
-    res.send('BRAND DELETE POST');
+exports.brand_delete_post = function(req, res, next){
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.params.id).exec(callback)
+        },
+        items: function(callback){
+            Item.find({'brand': req.params.id}).exec(callback)
+        },
+    }, function(err, results){
+            if(err) {return next(err);}
+            if(results.brand == null){
+                res.redirect('/brands');
+            }else{
+                Brand.findById(req.params.id, function(err, brand){
+                    if(err) {return next(err);}
+                    brand.remove();
+                    res.redirect('/brands');
+                });
+            }
+    });
 };
 
 // update brand GET (edit)
 exports.brand_edit = function(req, res, next){
-    res.send('BRAND UPDATE GET');
+    Brand.findById(req.params.id, function(err, brand){
+        if(err) {return next(err);}
+        if(brand==null){
+            var err = new Error('Brand not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('../views/brands/brand_form', {title: 'Edit Brand', brand: brand});
+    });
 };
+
 // update brand PUT
-exports.brand_update = function(req, res, next){
-    res.send('BRAND UPDATE POST');
-};
+exports.brand_update = [
+    check('name').isLength({min: 1}).withMessage('Brand name must not be empty').trim(),
+    check('description').isLength({min: 10}).withMessage('Description must be at least 10 characters').trim(),
+    sanitizeBody('*').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        var brand = new Brand(
+            {
+                name: req.body.name,
+                description: req.body.description,
+                //placeholder logo
+                // logo: ' ',
+                _id: req.params.id
+            });
+        if(!errors.isEmpty()){
+            res.render('../views/brands/brand_form' ,{title: 'Edit Brand', brand: brand, errors: errors.array()});
+        }else{
+            Brand.findByIdAndUpdate(req.params.id, brand, {}, function(err, thisBrand){
+                if(err) {return next(err);}
+                res.redirect(thisBrand.url);
+            });
+        }
+    }   
+];

@@ -13,7 +13,7 @@ router.get('/', item_controller.item_list);
 router.get('/new', item_controller.item_new);
 
 // create
-router.post('/', item_controller.item_create);
+router.post('/new', item_controller.item_create);
 
 // detail (SHOW)
 router.get('/:id', item_controller.item_detail);
@@ -21,9 +21,11 @@ router.get('/:id', item_controller.item_detail);
 // edit
 router.get('/:id/edit', item_controller.item_edit);
 // update
-router.put('/:id', item_controller.item_update);
+router.post('/:id/edit', item_controller.item_update);
 
-// delete
-router.delete('/:id', item_controller.item_delete);
+// delete get
+router.get('/:id/delete', item_controller.item_delete_get);
+// delete post
+router.post('/:id/delete', item_controller.item_delete_post);
 
 module.exports = router;
