@@ -4,7 +4,8 @@ block content
   h1 #{title}
     .ui.tiny.image.right.floated
       img(src=brand.logo, alt="#{brand.name}")
-    a.ui.button.right.floated(href=brand.url+"/delete") Delete Brand
+    a.ui.button.right.floated.red(href=brand.url+"/delete") Delete Brand
+    a.ui.button.right.floated.green(href=brand.url+"/edit") Edit Brand
 
   p
   .ui.divided.relaxed.items
