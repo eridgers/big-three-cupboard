@@ -114,27 +114,21 @@ exports.item_update = function(req, res, next){
     res.send('ITEM UPDATE POST');
 };
 
-// delete POST
-exports.item_delete = function(req, res, next){
-    res.send('ITEM DELETE POST');
-};
-
 // delete GET
 exports.item_delete_get = function(req, res, next) {
-    // get item, populate category, brand
     Item.findById(req.params.id).populate('brand category').exec(function(err, item){
         if(err) {return next(err);}
-        if (item==null) { // No results.
-            res.redirect('../views/items/index');
+        if (item==null) {
+            res.redirect('/items');
         }
-        res.render('item_delete', {title: 'Delete Gear', item: item});
+        res.render('../views/items/item_delete', {title: 'Delete Gear', item: item});
     });
 };
 
 // delete POST
 exports.item_delete_post = function(req, res, next) {
-    Item.findByIdAndRemove(req.body.id, function(err){
+    Item.findByIdAndRemove(req.params.id, function(err){
         if(err) {return next(err);}
-        res.redirect('../views/items/index');
+        res.redirect('/items');
     });
 };

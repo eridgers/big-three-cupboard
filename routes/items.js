@@ -24,8 +24,8 @@ router.get('/:id/edit', item_controller.item_edit);
 router.put('/:id', item_controller.item_update);
 
 // delete get
-router.delete('/:id', item_controller.item_delete_get);
+router.get('/:id/delete', item_controller.item_delete_get);
 // delete post
-router.delete('/:id', item_controller.item_delete_post);
+router.post('/:id/delete', item_controller.item_delete_post);
 
 module.exports = router;

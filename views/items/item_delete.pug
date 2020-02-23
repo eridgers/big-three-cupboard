@@ -2,9 +2,11 @@ extends ../layout.pug
 
 block content
   h1.ui.header #{title} #{item.name}
-    a.ui.right.floated.button.red(href=item.url+"/delete") Delete Item
+  p Really delete this item?
+    form(id="delete-form" action=item.url+"/delete" method="POST")
+      button.ui.button.red(type="submit") Yes begone with it.
+      a.ui.button.green(href="/items") Never mind
 
-  
   .ui.card
     .image
       img(src=item.image, alt="#{item.name}")
