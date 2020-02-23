@@ -77,12 +77,42 @@ exports.category_create = [
 
 // update GET (edit)
 exports.category_edit = function(req, res, next){
-    res.send('CATEGORY UPDATE GET');
+    Category.findById(req.params.id, function(err, category){
+        if(err) {return next(err);}
+        if(category==null){
+            var err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('../views/categories/category_form', {title: 'Edit Category', category: category});
+    });
 };
+
 // update PUT
-exports.category_update = function(req, res, next){
-    res.send('CATEGORY UPDATE POST');
-};
+exports.category_update = [
+    check('name').isLength({min: 1}).withMessage('Name must not be empty').matches(/^[a-z0-9 ]+$/i).withMessage('Category must be reasonable').trim(),
+    check('description').isLength({min: 10}).withMessage('Description must be at least 10 characters').matches(/^[a-z0-9 ]+$/i).trim(),
+    sanitizeBody('*').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        var category = new Category({
+            name: req.body.name,
+            description: req.body.description,
+            //placeholder image
+            // image: ' ',
+            _id: req.params.id
+        });
+        if(!errors.isEmpty()){
+            res.render('../views/categories/category_form', {title: 'Edit Category of Gear', category: category, errors: errors.array()});
+        }else{
+            Category.findByIdAndUpdate(req.params.id, category, {}, function(err, thisCategory){
+                if(err) {return next(err);}
+                res.redirect(thisCategory.url);
+            });
+        }
+    }
+];
 
 // delete category GET
 exports.category_delete_get = function(req, res, next){

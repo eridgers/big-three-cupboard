@@ -3,6 +3,7 @@ extends ../layout.pug
 block content
   h1 #{title}
     a.ui.right.floated.button.red(href=category.url+"/delete") Delete Category
+    a.ui.right.floated.button.green(href=category.url+"/edit") Edit Category
 
   .ui.divided.relaxed.items
     each item in items
