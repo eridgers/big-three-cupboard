@@ -48,12 +48,11 @@ exports.item_new = function(req, res, next){
 // create POST
 // export array rather than single function
 exports.item_create = [
-
     // Validate fields using express-validator
     check('name').isLength({min: 1}).withMessage('Name must be populated.').matches(/^[a-z0-9 ]+$/i).withMessage('Name should be alphanumeric').trim(),
     check('weight').isInt().withMessage('Weight must be in whole grams').trim(),
     check('cost').isDecimal().trim(),
-    check('description').matches(/^[a-z0-9 ?]+$/i).isLength({min: 30}).withMessage('Description must be at least 30 characters.').trim(),
+    check('description').matches(/^[a-z0-9 ?]+$/i).isLength({min: 10}).withMessage('Description must be at least 30 characters.').trim(),
     // TODO Image and quantity needs to be dealt with!
 
     // Santize fields using express-validator
@@ -102,17 +101,78 @@ exports.item_create = [
             });
         }
     }
-
 ];
 
 // update GET
 exports.item_edit = function(req, res, next){
-    res.send('ITEM UPDATE GET');
+    async.parallel({
+        brands: function(callback){
+            Brand.find(callback);
+        },
+        categories: function(callback){
+            Category.find(callback);
+        },
+        item: function(callback){
+            Item.findById(req.params.id).exec(callback);
+        },
+    }, function(err, results){
+        if(err) {return next(err);}
+        if(results.item == null){
+            var err = new Error('Item not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('../views/items/item_form', {title: 'Edit Gear', brands: results.brands, categories: results.categories, item: results.item});
+    })
 };
+
 // update POST
-exports.item_update = function(req, res, next){
-    res.send('ITEM UPDATE POST');
-};
+exports.item_update = [
+    check('name').isLength({min: 1}).withMessage('Name must be populated.').matches(/^[a-z0-9 ]+$/i).withMessage('Name should be alphanumeric').trim(),
+    check('weight').isInt().withMessage('Weight must be in whole grams').trim(),
+    check('cost').isDecimal().trim(),
+    check('description').matches(/^[a-z0-9 ?]+$/i).isLength({min: 30}).withMessage('Description must be at least 30 characters.').trim(),
+    // TODO Image and quantity needs to be dealt with!
+    sanitizeBody('*').escape(),
+    sanitizeBody('brand.*').escape(),    
+    sanitizeBody('category.*').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        var item = new Item(
+            {   name: req.body.name,
+                brand: req.body.brand,
+                category: req.body.category,
+                weight: req.body.weight,
+                cost: req.body.cost,
+                description: req.body.description,
+                //PLACEHOLDER quantity and image
+                quantity: 1,
+                // image: ' ',
+                _id: req.params.id
+            });
+        if(!errors.isEmpty()){
+            async.parallel({
+                brands: function(callback){
+                    Brand.find(callback);
+                },
+                categories: function(callback){
+                    Category.find(callback);
+                },
+            }, function(err, results){
+                if(err) {return next(err);}
+                res.render('../views/items/item_form', {title: 'Edit Gear', brands: results.brands, categories: results.categories, item: item, errors: errors.array()});
+            });
+            return;
+        }
+        else{
+            Item.findByIdAndUpdate(req.params.id, item, {}, function(err, thisItem){
+                if(err) {return next(err);}
+                res.redirect(thisItem.url);
+            });
+        }
+    }
+];
 
 // delete GET
 exports.item_delete_get = function(req, res, next) {

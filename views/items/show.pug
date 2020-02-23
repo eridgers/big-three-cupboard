@@ -3,8 +3,8 @@ extends ../layout.pug
 block content
   h1.ui.header #{title} #{item.name}
     a.ui.right.floated.button.red(href=item.url+"/delete") Delete Item
+    a.ui.right.floated.button.green(href=item.url+"/edit") Update Item
 
-  
   .ui.card
     .image
       img(src=item.image, alt="#{item.name}")

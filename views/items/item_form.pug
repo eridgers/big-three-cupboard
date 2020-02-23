@@ -3,7 +3,7 @@ extends ../layout.pug
 block content
   h1 #{title}
 
-  form.ui.form(action="/items" method="post")
+  form.ui.form(action="" method="post")
     .ui.grid
       .six.wide.column
         .field
@@ -39,7 +39,7 @@ block content
         .field
           label(for="description") Description:
           textarea#description.form-control(type="textarea" placeholder="description" name="description" rows="5" required="true")=(undefined==item ? '' : item.description)
-        button.ui.submit.button.right.floated(type="submit") Create
+        button.ui.submit.button.right.floated(type="submit") Save
 
   if errors
     ul
