@@ -23,8 +23,8 @@ router.get('/:id/edit', brand_controller.brand_edit);
 router.put('/:id/update', brand_controller.brand_update);
 
 // delete get
-router.delete('/:id', brand_controller.brand_delete_get);
+router.get('/:id/delete', brand_controller.brand_delete_get);
 // delete post
-router.delete('/:id', brand_controller.brand_delete_post);
+router.post('/:id/delete', brand_controller.brand_delete_post);
 
 module.exports = router;

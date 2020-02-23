@@ -4,8 +4,10 @@ block content
   h1 #{title}
     .ui.tiny.image.right.floated
       img(src=brand.logo, alt="#{brand.name}")
-    a.ui.button.right.floated(href=brand.url+"/delete") Delete Brand
-
+  p BELOW ITEMS WILL BE DELETED BY CASCADE
+    form(id="delete-form" action=brand.url+"/delete" method="POST")
+      button.ui.button.red(type="submit") YES DELETE THEM ALL
+      a.ui.button.green(href="/brands") Never mind
   p
   .ui.divided.relaxed.items
     each item in items

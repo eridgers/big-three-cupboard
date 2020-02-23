@@ -75,42 +75,44 @@ exports.brand_create = [
 ];
 
 // delete brand GET
-exports.brand_delete_get= function(req, res, next){
+exports.brand_delete_get = function(req, res, next){
     async.parallel({
         brand: function(callback){
             Brand.findById(req.params.id).exec(callback)
         },
         items: function(callback){
-            Item.findById({'brand': req.params.id}).exec(callback)
-        }, function(err, results){
+            Item.find({'brand': req.params.id}).exec(callback)
+        },
+    }, function(err, results){
             if (err) {return next(err);}
             if (results.brand == null){
-                res.redirect('../views/brands/index');
+                res.redirect('/brands');
             }
-            res.render('brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
-        });
-};
+            res.render('../views/brands/brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
+    });
+}
 
 // delete brand POST
 exports.brand_delete_post = function(req, res, next){
     async.parallel({
         brand: function(callback){
-            Brand.findById(req.body.id).exec(callback)
+            Brand.findById(req.params.id).exec(callback)
         },
         items: function(callback){
-            Item.find({'brand': req.body.id}).exec(callback)
-        }, function(err, results){
+            Item.find({'brand': req.params.id}).exec(callback)
+        },
+    }, function(err, results){
             if(err) {return next(err);}
-            if(results.items.length > 0){
-                res.render('../views/brands/brand_delete', {title: 'Delete Brand', brand: results.brand, items: results.items});
-                return;
+            if(results.brand == null){
+                res.redirect('/brands');
             }else{
-                Brand.findByIdAndRemove(req.body.id, function(err){
+                Brand.findById(req.params.id, function(err, brand){
                     if(err) {return next(err);}
-                    res.redirect('../views/brands/index');
+                    brand.remove();
+                    res.redirect('/brands');
                 });
             }
-        });
+    });
 };
 
 // update brand GET (edit)
