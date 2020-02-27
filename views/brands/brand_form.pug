@@ -3,16 +3,19 @@ extends ../layout.pug
 block content
   h1 #{title}
 
-  form.ui.form(action="" method="post")
+  form.ui.form(action="" method="post" enctype="multipart/form-data")
     .ui.grid
       .six.wide.column
         .field
           label(for="name") Name
           input#name.form-control(type="text" placeholder="Name of Brand" name="name" required="true" value=(undefined==brand ? '' : brand.name))
     .ten.wide.column
-        .field
+      .fields
+        .field.six.wide
           label(for="description") Description:
           textarea#description.form-control(type="textarea" placeholder="description" name="description" rows="5" required="true")=(undefined==brand ? '' : brand.description)
+        .field.four.wide
+          input#logo.form-control(type="file" name="logo" placeholder="Upload a Logo" required="true")
         button.ui.submit.button.right.floated(type="submit") Save
 
   if errors

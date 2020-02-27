@@ -1,6 +1,17 @@
-var Brand = require('../models/brand');
-var Item = require('../models/item');
-var async = require('async');
+const Brand = require('../models/brand');
+const Item = require('../models/item');
+const async = require('async');
+const multer = require('multer');
+
+// Storage setup
+var storage = multer.diskStorage({
+    destination: './public/images/uploads/',
+    filename: function(req, file, done) {
+      done(null, file.fieldname + '-' + Date.now() + '.jpg');
+    }
+  });
+const upload = multer({ storage: storage }).single('logo');
+const path = '/images/uploads/'; 
 
 const { check, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
@@ -43,12 +54,14 @@ exports.brand_new = function(req, res, next){
 
 // create brand POST
 exports.brand_create = [
-    //validate fields using express-validator
+    // upload logo
+    upload,
+    // validate fields using express-validator
     check('name').isLength({min: 1}).withMessage('Brand name must not be empty').trim(),
     check('description').isLength({min: 10}).withMessage('Description must be at least 10 characters').trim(),
     //santize
     sanitizeBody('*').escape(),
-    //process request
+
     (req, res, next) => {
         //extract validation errors
         const errors = validationResult(req);
@@ -57,22 +70,24 @@ exports.brand_create = [
             {
                 name: req.body.name,
                 description: req.body.description,
-                //placeholder logo
-                logo: ' '
+                logo: path + req.file.filename
             });
         //check for errors, if yes render form again
         if(!errors.isEmpty()){
+            console.log('logo' +brand.logo)
             res.render('../views/brands/brand_form' ,{title: 'Create Brand', brand: brand, errors: errors.array()});
         }else{
             //else data valid so try to save item to DB
             brand.save(function(err){
                 if(err) {return next(err);}
-                //check errors if success redirect to new brand
-                res.redirect(brand.url);
+            //check errors if success redirect to new brand
+            res.redirect(brand.url);
             });
         }
     }   
 ];
+
+
 
 // delete brand GET
 exports.brand_delete_get = function(req, res, next){
